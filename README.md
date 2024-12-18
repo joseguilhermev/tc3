@@ -1,5 +1,3 @@
-Aqui está a versão traduzida e estruturada em português:
-
 ---
 
 # Pipeline Automatizado de Extração de Dados, Engenharia de Atributos e Predição
@@ -232,11 +230,5 @@ Mongo Express está disponível em: `http://localhost:8081`
 - **Escalabilidade**: Adicionar caching, balanceamento de carga e replicação do MongoDB.
 - **Alertas e Notificações**: Enviar alertas (e-mail/Slack) ao detectar condições específicas de mercado.
 - **Melhorias no Modelo**: Explorar outros algoritmos, otimização de hiperparâmetros e novas features.
-
----
-
-## Licença
-
-Inclua informações sobre a licença aqui.
 
 ---
