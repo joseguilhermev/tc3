@@ -1,228 +1,236 @@
-Automated Data Extraction, Feature Engineering, and Prediction Pipeline
-=======================================================================
+Here is the corrected and well-structured version of your Markdown document:
 
-Este repositório contém um pipeline completo para extração de dados, engenharia de atributos, treinamento de um modelo de Machine Learning (XGBoost) e realização de inferências em tempo real. O projeto integra diversas tecnologias, incluindo FastAPI, Playwright, MongoDB, Streamlit, e Docker (com Docker Compose) para orquestrar a solução.
+---
 
-Sumário
--------
+# Automated Data Extraction, Feature Engineering, and Prediction Pipeline
 
--   Visão Geral
--   Arquitetura do Projeto
--   Funcionalidades
--   Tecnologias Utilizadas
--   Preparação do Ambiente
--   Como Executar
--   Fluxo de Trabalho do Projeto
-    -   1.  Extração de Dados (Scraping)
-    -   1.  Engenharia de Atributos e Armazenamento
-    -   1.  Treinamento do Modelo
-    -   1.  Inferência e Predição
--   Endpoints Disponíveis (FastAPI)
--   Visualização (Streamlit)
--   Monitoramento do Banco de Dados (Mongo Express)
--   Estrutura de Arquivos
--   Próximos Passos e Melhorias Futuras
--   Licença
+This repository contains a complete pipeline for data extraction, feature engineering, training a Machine Learning model (XGBoost), and performing real-time inferences. The project integrates various technologies, including FastAPI, Playwright, MongoDB, Streamlit, and Docker (with Docker Compose) to orchestrate the solution.
 
-Visão Geral
------------
+---
 
-Este projeto tem como objetivo:
+## Table of Contents
 
-1.  Extrair dados históricos de preços (por exemplo, BTC/USD) a partir de uma fonte web.
-2.  Processar e armazenar esses dados em um banco de dados MongoDB.
-3.  Aplicar engenharia de atributos (feature engineering) para gerar variáveis preditivas.
-4.  Treinar um modelo de Machine Learning (XGBoost) para prever tendências (0 = "Short", 1 = "Long").
-5.  Executar predições em tempo real a partir dos dados mais recentes.
-6.  Apresentar os resultados (incluindo automação periódica) via uma interface Streamlit.
+1. [Overview](#overview)
+2. [Project Architecture](#project-architecture)
+3. [Features](#features)
+4. [Technologies Used](#technologies-used)
+5. [Environment Setup](#environment-setup)
+6. [How to Run](#how-to-run)
+7. [Project Workflow](#project-workflow)
+    1. [Data Extraction (Scraping)](#1-data-extraction-scraping)
+    2. [Feature Engineering and Storage](#2-feature-engineering-and-storage)
+    3. [Model Training](#3-model-training)
+    4. [Inference and Prediction](#4-inference-and-prediction)
+8. [Available Endpoints (FastAPI)](#available-endpoints-fastapi)
+9. [Visualization (Streamlit)](#visualization-streamlit)
+10. [Database Monitoring (Mongo Express)](#database-monitoring-mongo-express)
+11. [File Structure](#file-structure)
+12. [Future Steps and Improvements](#future-steps-and-improvements)
+13. [License](#license)
 
-Arquitetura do Projeto
-----------------------
+---
 
-A arquitetura compreende múltiplos contêineres Docker orquestrados pelo Docker Compose:
+## Overview
 
--   fastapi-app: Fornece endpoints de scraping (extração) e predição.
--   mongo: Banco de dados NoSQL para armazenar dados brutos e dados pós-engenharia.
--   mongo-express: Interface web para monitorar o banco de dados MongoDB.
--   streamlit-app: Interface web interativa para iniciar o fluxo de extração e exibir predições.
+This project aims to:
 
-Adicionalmente, o treinamento do modelo é realizado offline (utilizando notebooks ou scripts), resultando em um artefato (modelo treinado em `models/xgb_model.pkl`) pronto para inferência.
+1. Extract historical price data (e.g., BTC/USD) from a web source.
+2. Process and store these data in a MongoDB database.
+3. Apply feature engineering to generate predictive variables.
+4. Train a Machine Learning model (XGBoost) to predict trends (`0 = Short`, `1 = Long`).
+5. Perform real-time predictions using the latest data.
+6. Present results (including periodic automation) via a Streamlit interface.
 
-Funcionalidades
----------------
+---
 
--   Extração Automatizada de Dados: Utiliza Playwright para renderizar páginas dinâmicas e extrair dados de tabelas.
--   Engenharia de Atributos: Geração de recursos como `change`, `change_lag1`, `price_range`, `relative_volatility`, entre outros.
--   Armazenamento em Banco NoSQL: Persiste dados e features no MongoDB.
--   Treinamento de Modelo XGBoost: Algoritmo de boosting para classificação binária.
--   API de Inferência (FastAPI): Endpoint para obter predições em tempo real.
--   Interface Web (Streamlit): Painel interativo para iniciar extrações, obter predições e visualizar sinais (Long/Short).
--   Monitoramento via Mongo Express: Visualização rápida dos dados armazenados.
+## Project Architecture
 
-Tecnologias Utilizadas
-----------------------
+The architecture includes multiple Docker containers orchestrated by Docker Compose:
 
--   Linguagem: Python 3
--   Framework de API: FastAPI
--   Extração Web: Playwright (para interagir com páginas dinâmicas)
--   Banco de Dados: MongoDB (com Mongo Express para visualização)
--   Modelagem: XGBoost, Scikit-Learn
--   Visualização e UI: Streamlit
--   Orquestração de Contêineres: Docker & Docker Compose
--   Ambiente: Ubuntu/Linux (imagens slim do Python)
+- **fastapi-app**: Provides endpoints for scraping (data extraction) and prediction.
+- **mongo**: A NoSQL database to store raw and processed data.
+- **mongo-express**: A web interface to monitor the MongoDB database.
+- **streamlit-app**: An interactive web interface for initiating the extraction workflow and displaying predictions.
 
-Preparação do Ambiente
-----------------------
+Model training is performed offline (using notebooks or scripts), resulting in an artifact (`models/xgb_model.pkl`) ready for inference.
 
-**Requisitos:**
+---
 
--   Docker instalado.
--   Docker Compose instalado.
+## Features
 
-**Variáveis de Ambiente Importantes:**
+- **Automated Data Extraction**: Uses Playwright to render dynamic pages and extract table data.
+- **Feature Engineering**: Generates features like `change`, `change_lag1`, `price_range`, `relative_volatility`, among others.
+- **NoSQL Storage**: Stores raw and engineered data in MongoDB.
+- **XGBoost Model Training**: Implements a boosting algorithm for binary classification.
+- **Inference API (FastAPI)**: Provides endpoints for real-time predictions.
+- **Web Interface (Streamlit)**: Interactive dashboard for data extraction and prediction.
+- **Database Monitoring**: Mongo Express for quick visualization of stored data.
 
--   `MONGO_URI` (padrão: `mongodb://mongo:27017`)
--   `MONGO_DB` (padrão: `prices`)
+---
 
-Estas variáveis são configuradas automaticamente pelo Docker Compose.
+## Technologies Used
 
-Como Executar
--------------
+- **Language**: Python 3
+- **API Framework**: FastAPI
+- **Web Scraping**: Playwright (to interact with dynamic pages)
+- **Database**: MongoDB (with Mongo Express for visualization)
+- **Modeling**: XGBoost, Scikit-Learn
+- **Visualization and UI**: Streamlit
+- **Container Orchestration**: Docker & Docker Compose
+- **Environment**: Ubuntu/Linux (Python slim images)
 
-1.  **Clonar o repositório**:
+---
 
-bash
+## Environment Setup
 
-Copy code
+**Requirements:**
 
-`git clone <url-do-repositorio>
-cd <pasta-do-repositorio>`
+- Docker installed.
+- Docker Compose installed.
 
-1.  **Construir e iniciar os contêineres**:
+**Important Environment Variables:**
 
-bash
+- `MONGO_URI` (default: `mongodb://mongo:27017`)
+- `MONGO_DB` (default: `prices`)
 
-Copy code
+These variables are automatically configured by Docker Compose.
 
-`docker-compose up --build`
+---
 
-Esse comando iniciará:
+## How to Run
 
--   FastAPI na porta 11000
--   MongoDB na porta 27017
--   Mongo Express na porta 8081
--   Streamlit na porta 8501
+1. **Clone the repository**:
 
-Acesse a interface do Streamlit em: <http://localhost:8501>
+   ```bash
+   git clone <repository-url>
+   cd <repository-folder>
+   ```
 
-Fluxo de Trabalho do Projeto
-----------------------------
+2. **Build and start the containers**:
 
-### 1\. Extração de Dados (Scraping)
+   ```bash
+   docker-compose up --build
+   ```
 
-O script `src/endpoints/scraping.py` fornece um endpoint `POST /extract` que:
+   This will start:
 
--   Recebe uma URL (por padrão, uma página com histórico de preços BTC/USD).
--   Utiliza Playwright para navegar até a página, esperar o carregamento da tabela e extrair dados.
--   Aplica parsing via BeautifulSoup e extrai colunas relevantes: `open`, `high`, `low`, `close`.
--   Insere os dados pré-processados no MongoDB.
+   - FastAPI at `http://localhost:11000`
+   - MongoDB at `http://localhost:27017`
+   - Mongo Express at `http://localhost:8081`
+   - Streamlit at `http://localhost:8501`
 
-### 2\. Engenharia de Atributos e Armazenamento
+---
 
-O script `src/utils.py` contém funções para:
+## Project Workflow
 
--   Calcular mudanças percentuais (`change`, `change_lag1`, `change_lag2`).
--   Calcular `price_range`, `relative_volatility`, `avg_lagged_change`, entre outros.
+### 1. Data Extraction (Scraping)
 
-Os dados resultantes são armazenados no MongoDB (coleção `prices`). O arquivo `transform_data.py` demonstra a transformação e criação do conjunto de treinamento usado offline.
+The script `src/endpoints/scraping.py` provides a `POST /extract` endpoint that:
 
-### 3\. Treinamento do Modelo
+- Accepts a URL (default: a page with BTC/USD price history).
+- Uses Playwright to navigate to the page, wait for table loading, and extract data.
+- Parses the data via BeautifulSoup to extract relevant columns: `open`, `high`, `low`, `close`.
+- Inserts the preprocessed data into MongoDB.
 
-O script `train_test.py`:
+### 2. Feature Engineering and Storage
 
--   Carrega dados transformados (`transformed_data.parquet`).
--   Executa análise exploratória (EDA).
--   Treina um modelo XGBoost para prever a direção do próximo preço.
--   Salva o modelo em `models/xgb_model.pkl`.
+The script `src/utils.py` contains functions to:
 
-Este passo é realizado localmente, antes da implantação. O modelo treinado é então usado pelo endpoint de inferência.
+- Calculate percentage changes (`change`, `change_lag1`, `change_lag2`).
+- Generate `price_range`, `relative_volatility`, `avg_lagged_change`, and more.
 
-### 4\. Inferência e Predição
+The resulting data are stored in MongoDB (collection: `prices`). The file `transform_data.py` demonstrates how data are transformed for training.
 
-O script `src/endpoints/inference.py` fornece um endpoint `GET /predict` que:
+### 3. Model Training
 
--   Carrega o último registro inserido no MongoDB.
--   Gera um dataframe com as features necessárias.
--   Carrega o modelo `xgb_model.pkl`.
--   Retorna a predição (`0 = Short`, `1 = Long`) no formato JSON.
+The script `train_test.py`:
 
-Endpoints Disponíveis (FastAPI)
--------------------------------
+- Loads transformed data (`transformed_data.parquet`).
+- Performs exploratory data analysis (EDA).
+- Trains an XGBoost model to predict the next price direction.
+- Saves the trained model to `models/xgb_model.pkl`.
 
--   `POST /extract` (tags: scraping): Inicia extração de dados a partir de uma URL fornecida.
--   `GET /predict` (tags: inference): Retorna a predição do modelo baseado no dado mais recente.
+This step is performed locally before deployment. The trained model is used by the inference endpoint.
 
-Exemplo de uso (usando `curl`):
+### 4. Inference and Prediction
 
-bash
+The script `src/endpoints/inference.py` provides a `GET /predict` endpoint that:
 
-Copy code
+- Loads the latest record from MongoDB.
+- Creates a dataframe with the necessary features.
+- Loads the model from `xgb_model.pkl`.
+- Returns the prediction (`0 = Short`, `1 = Long`) in JSON format.
 
-`curl -X POST\
-     -H "Content-Type: application/json"\
-     -d '{"url":"https://www.cashbackforex.com/chart?s=BTC.USD-1m","collection_name":"prices"}'\
+---
+
+## Available Endpoints (FastAPI)
+
+- **`POST /extract`** (tags: scraping): Starts data extraction from a given URL.
+- **`GET /predict`** (tags: inference): Returns the model's prediction based on the latest data.
+
+**Example Usage**:
+
+```bash
+curl -X POST \
+     -H "Content-Type: application/json" \
+     -d '{"url":"https://www.cashbackforex.com/chart?s=BTC.USD-1m","collection_name":"prices"}' \
      http://localhost:11000/extract
 
-curl -X GET http://localhost:11000/predict`
+curl -X GET http://localhost:11000/predict
+```
 
-Visualização (Streamlit)
-------------------------
+---
 
-A interface Streamlit (`app.py`) permite:
+## Visualization (Streamlit)
 
--   Iniciar a automação do processo de extração e predição de forma periódica (loop infinito).
--   Exibir a última predição (Short/Long).
+The Streamlit interface (`app.py`) allows users to:
 
-Acesse via <http://localhost:8501>.
+- Automate the extraction and prediction process periodically.
+- Display the latest prediction (`Short`/`Long`).
 
-Monitoramento do Banco de Dados (Mongo Express)
------------------------------------------------
+Access the interface at: `http://localhost:8501`.
 
-O Mongo Express está disponível em <http://localhost:8081>, onde:
+---
 
--   Usuário: admin
--   Senha: password
+## Database Monitoring (Mongo Express)
 
-Você pode inspecionar a coleção `prices` e verificar os dados armazenados.
+Mongo Express is available at: `http://localhost:8081`
 
-Estrutura de Arquivos
----------------------
+- **Username**: admin  
+- **Password**: password  
 
-bash
+You can inspect the `prices` collection and verify stored data.
 
-Copy code
+---
 
-`.
+## File Structure
+
+```plaintext
+.
 ├── src/
 │   ├── endpoints/
-│   │   ├── inference.py   # Endpoint de predição via modelo
-│   │   └── scraping.py    # Endpoint de extração e inserção de dados no MongoDB
-│   └── utils.py           # Funções utilitárias (MongoDB, parsing, feature eng.)
-├── app.py                 # Interface Streamlit
-├── main.py                # Inicialização do FastAPI, inclui routers de scraping e inference
-├── compose.yml            # Definições do Docker Compose
-├── Dockerfile             # Dockerfile principal
-├── eda.py                 # Análise exploratória de dados
-├── requirements.txt       # Dependências Python
-├── test.py                # Teste simples de scraping com renderização HTML
-├── train_test.py          # Treinamento e avaliação do modelo XGBoost
-└── transform_data.py      # Transformação dos dados originais em conjunto final de treinamento`
+│   │   ├── inference.py    # Prediction endpoint
+│   │   └── scraping.py     # Data extraction and MongoDB insertion
+│   └── utils.py            # Utilities (MongoDB, parsing, feature engineering)
+├── app.py                  # Streamlit interface
+├── main.py                 # FastAPI initialization (includes scraping & inference routers)
+├── compose.yml             # Docker Compose definitions
+├── Dockerfile              # Main Dockerfile
+├── eda.py                  # Exploratory Data Analysis
+├── requirements.txt        # Python dependencies
+├── test.py                 # Simple scraping test with HTML rendering
+├── train_test.py           # XGBoost model training and evaluation
+└── transform_data.py       # Data transformation for training
+```
 
-Próximos Passos e Melhorias Futuras
------------------------------------
+---
 
--   Automação via Crontab/Airflow: Automatizar a execução periódica do pipeline em produção.
--   Validação de Dados: Implementar checagens mais robustas para garantir a qualidade dos dados extraídos.
--   Escalabilidade: Implementar caching, load balancing e estratégias de replicação do MongoDB em ambientes de produção.
--   Alertas e Notificações: Envio de alertas (e-mail/Slack) quando certas condições de mercado forem detectadas.
--   Melhorias no Modelo: Explorar outros algoritmos, otimização de hiperparâmetros e adição de novas features (macro, técnico, etc.).
+## Future Steps and Improvements
+
+- **Automation with Crontab/Airflow**: Automate periodic pipeline execution in production.
+- **Data Validation**: Implement robust checks to ensure data quality.
+- **Scalability**: Add caching, load balancing, and MongoDB replication for production environments.
+- **Alerts and Notifications**: Send alerts (email/Slack) when specific market conditions are detected.
+- **Model Improvements**: Explore other algorithms, hyperparameter optimization, and additional features (macro, technical, etc.).
+
+---
